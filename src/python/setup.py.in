@@ -9,7 +9,7 @@ if "sdist" not in sys.argv and os.environ.get('DESTDIR'):
     sys.argv += ['--root', os.environ['DESTDIR']]
 
 setup(name='bcc',
-      version='@REVISION@',
+      version="0.26.0+8f3ed5a5b1",
       description='BPF Loader Library',
       author='Brenden Blanco',
       author_email='bblanco@plumgrid.com',
