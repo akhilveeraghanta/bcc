@@ -49,6 +49,7 @@
 #include <sys/types.h>
 #include <sys/vfs.h>
 #include <unistd.h>
+#include <linux/if_alg.h>
 
 #include "bcc_zip.h"
 #include "perf_reader.h"
@@ -67,6 +68,8 @@
 #define __NR_bpf 351
 #elif defined(__aarch64__)
 #define __NR_bpf 280
+#elif defined(__arm__)
+#define __NR_bpf 386
 #else
 #define __NR_bpf 321
 #endif
@@ -1157,7 +1160,7 @@ static int create_probe_event(char *buf, const char *ev_name,
                attach_type == BPF_PROBE_ENTRY ? 'p' : 'r',
                ev_alias, config1);
   } else {
-    res = snprintf(buf, PATH_MAX, "%c:%ss/%s %s:0x%lx", attach_type==BPF_PROBE_ENTRY ? 'p' : 'r',
+    res = snprintf(buf, PATH_MAX, "%c:%ss/%s %s:0x%PRIx64", attach_type==BPF_PROBE_ENTRY ? 'p' : 'r',
                    event_type, ev_alias, config1, (unsigned long)offset);
     if (res < 0 || res >= PATH_MAX) {
       fprintf(stderr, "Event alias (%s) too long for buffer\n", ev_alias);
@@ -1242,6 +1245,7 @@ static int bpf_attach_probe(int progfd, enum bpf_probe_attach_type attach_type,
       }
     }
   }
+
   // If perf_event_open succeeded, bpf_attach_tracing_event will use the created
   // Perf Event FD directly and buf would be empty and unused.
   // Otherwise it will read the event ID from the path in buf, create the

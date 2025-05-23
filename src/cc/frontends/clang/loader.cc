@@ -357,6 +357,9 @@ void *get_clang_target_cb(bcc_arch_t arch, bool for_syscall)
     case BCC_ARCH_ARM64:
       ret = "aarch64-unknown-linux-gnu";
       break;
+    case BCC_ARCH_ARM:
+      ret = "armv7l-unknown-linux-gnueabi";
+      break;
     case BCC_ARCH_MIPS:
       ret = "mips64el-unknown-linux-gnuabi64";
       break;
@@ -408,7 +411,6 @@ int ClangLoader::do_compile(
   DiagnosticsEngine diags(DiagID, &*diag_opts, diag_client);
 
   // set up the command line argument wrapper
-
   string target_triple = get_clang_target();
   driver::Driver drv("", target_triple, diags);
 
