@@ -58,6 +58,12 @@ const char *calling_conv_syscall_regs_s390x[] = { "orig_gpr2", "gprs[3]", "gprs[
 
 const char *calling_conv_regs_arm64[] = {"regs[0]", "regs[1]", "regs[2]",
                                        "regs[3]", "regs[4]", "regs[5]"};
+
+const char *calling_conv_regs_arm[] = {"uregs[0]", "uregs[1]", "uregs[2]",
+                                       "uregs[3]"};
+
+const char *calling_conv_syscall_regs_arm[] = {"orig_x0", "regs[1]", "regs[2]", "regs[3]"};
+
 const char *calling_conv_syscall_regs_arm64[] = {"orig_x0", "regs[1]", "regs[2]",
                                        "regs[3]", "regs[4]", "regs[5]"};
 
@@ -89,6 +95,11 @@ void *get_call_conv_cb(bcc_arch_t arch, bool for_syscall)
       ret = calling_conv_regs_arm64;
       if (for_syscall)
         ret = calling_conv_syscall_regs_arm64;
+      break;
+    case BCC_ARCH_ARM:
+      ret = calling_conv_regs_arm;
+      if (for_syscall)
+        ret = calling_conv_syscall_regs_arm;
       break;
     case BCC_ARCH_MIPS:
       ret = calling_conv_regs_mips;
